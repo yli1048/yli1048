@@ -21,7 +21,7 @@ print('The average score is', average)
 
 # If the average is a high score,
 # congratulate the user.
-# Changed the variable name to uppercase because python is case sensitive.
+# Changed the variable name to uppercase because Python is case-sensitive.
 if average >= HIGH_SCORE:
     print('Congratulations!')
 print('That is a great average!')
