@@ -1,0 +1,64 @@
+---
+title: "Assignment 1"
+author: "Yanyi Li"
+date: "2024-09-05"
+output: html_document
+---
+
+Overview
+
+  The selected article is titled "Both Republicans And Democrats Have an Age Problem" authored by Nate Silver and Dhrumil Mehta, accessible at https://fivethirtyeight.com/features/both-republicans-and-democrats-have-an-age-problem/. The article centers on the increasing average age of Congress members, highlighting the paradox of a growing youth electorate that is less inclined to align with a specific political party.
+
+```{r include=FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+
+```{r}
+# import data
+rm(list= ls())
+stem_data <- read.csv('https://raw.githubusercontent.com/fivethirtyeight/data/master/congress-age/congress-terms.csv')
+dim(stem_data)
+```
+
+
+```{r}
+head(stem_data)
+```
+
+
+How many Congress members are over 65 years old?
+
+There were 2,627 Congress members who were 65 years old or older.
+```{r}
+Old_members <- subset(stem_data,age > 65)
+head(Old_members)
+```
+
+
+What is the minimum, average, and maximum of Congress members' age?
+
+The minimum age of congress members was 25, with an average age of 53 and the oldest member being 98 years old.
+```{r}
+congress <- subset.data.frame(stem_data, stem_data$congress<=113)
+summary(congress$age)
+```
+
+
+What is the minimum, average, and maximum age of congress members in 113th Congress?
+
+The minimum age of congress members was 29, with an average age of 57 and the oldest member being 93 years old.
+```{r}
+congress_113 <- subset.data.frame(stem_data, stem_data$congress>=113)
+summary(congress_113$age)
+```
+```{r}
+#Plotting a histogram
+hist(congress_113$age, xlab = "113th Congress Members' Age", main = "")
+```
+
+
+Conclusion
+
+  In light of the observed increase in the age of congress members, it is noteworthy that individuals over 65 continue to be elected as congress members. Simultaneously, the minimum age of newly initiated congress members has demonstrated an upward trend, with the youngest members commencing their term in 2013 at 29 or above. To enhance the validity of the article, an expansion of the data scope to encompass contemporary trends is recommended to evaluate whether the average age of congress members has experienced an increase, stability, or decline. Moreover, incorporating a survey polling the perspectives of young voters on the age of congressional representatives would also be beneficial.
