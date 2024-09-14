@@ -1,0 +1,116 @@
+---
+title: "Week 2"
+author: "Yanyi Li"
+date: "2024-09-12"
+output: html_document
+---
+
+## Overview
+
+##### In the upcoming assignment, I will undertake the task of constructing a table in MySQL to house specific data. Following this, I will proceed with the extraction of this data from the database and its subsequent transfer into an R dataframe for further analysis.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(tidyverse)
+library(ggplot2)
+library(RMySQL)
+```
+
+
+```{r connection}
+#Setting up connection
+connection <- dbConnect(MySQL(), user = 'yanyi.li01',
+                        password = '1e9b78b6741e00f1', 
+                        host = 'cunydata607sql.mysql.database.azure.com', port = 3306,
+                        dbname = 'yanyi.li01')
+```
+
+
+```{r tables}
+#List the tables
+dbListTables(connection)
+```
+
+
+### Transfer data from SQL database to R dataframe
+
+```{r}
+#Write query to access the table
+result = dbSendQuery(connection, "select * from movie_reviews")
+
+#Store the result in a data frame
+data.frame = fetch(result, n=5)
+print(data.frame)
+```
+
+
+```{r bar plot with missing value}
+#Create a bar chart
+ggplot(data.frame, aes(x = First_Name, y = Despicable_Me_4)) +
+  geom_col() +
+  labs(title = "Despicable Me 4")
+```
+
+
+###  Missing data strategy
+
+##### I opted to substitute the missing values with the mean of the reviews from other respondents due to the relatively modest size of the dataset, rendering the use of the median inappropriate. Furthermore, given that the reviews are all rated on a scale of 1 to 5, no extreme values are present. 
+
+```{r replace missing values}
+#Replace missing data with mean
+data.frame$Deadpool_And_Wolverine[is.na(data.frame$Deadpool_And_Wolverine)] <-   mean(data.frame$Deadpool_And_Wolverine, na.rm = TRUE)
+
+data.frame$Despicable_Me_4[is.na(data.frame$Despicable_Me_4)] <-   mean(data.frame$Despicable_Me_4, na.rm = TRUE)
+
+data.frame$Inside_Out_4[is.na(data.frame$Inside_Out_4)] <-   mean(data.frame$Inside_Out_4, na.rm = TRUE)
+
+data.frame$Alien_Romulus[is.na(data.frame$Alien_Romulus)] <- mean(data.frame$Alien_Romulus, na.rm = TRUE)
+
+data.frame$Beetlejuice_Beetlejuice[is.na(data.frame$Beetlejuice_Beetlejuice)] <-   mean(data.frame$Beetlejuice_Beetlejuice, na.rm = TRUE)
+
+data.frame$It_Ends_With_Us[is.na(data.frame$It_Ends_With_Us)] <-   mean(data.frame$It_Ends_With_Us, na.rm = TRUE)
+```
+
+
+```{r rounding}
+#Round the mean to whole numbers
+data.frame$Deadpool_And_Wolverine <- round(data.frame$Deadpool_And_Wolverine, digits = 0)
+
+data.frame$Despicable_Me_4 <- round(data.frame$Despicable_Me_4, digits = 0)
+
+data.frame$Inside_Out_4 <- round(data.frame$Inside_Out_4, digits = 0)
+
+data.frame$Alien_Romulus <- round(data.frame$Alien_Romulus, digits = 0)
+
+data.frame$Beetlejuice_Beetlejuice <- round(data.frame$Beetlejuice_Beetlejuice, digits = 0)
+
+data.frame$It_Ends_With_Us <- round(data.frame$It_Ends_With_Us, digits = 0)
+```
+
+
+```{r}
+#Double check the new data frame
+print(data.frame)
+```
+
+
+```{r bar plot}
+#Create a bar chart
+ggplot(data.frame, aes(x = First_Name, y = Despicable_Me_4)) +
+  geom_col() +
+  labs(title = "Despicable Me 4 Ratings")
+```
+
+
+### Conclusion
+
+##### In this assignment, I learned how to transfer data from a MySQL database to an R data frame. It is convenient to do so, as it can help me import a large amount of data without having to do a lot of manual work. One way to extend this movie rating assignment would be to increase the sample size and compare missing data strategies by using the median or mean.
+
+
+#### Bonus Challenge Question:
+#####  Is there any benefit in standardizing ratings? How might you approach this?
+
+Standardized rating has several benefits. Firstly, it improves the clarity and quality of data by saving time in reading and analyzing the information. Secondly, it makes it easier for others to understand, such as when presenting the process and results to an audience. Thirdly, standardized ratings are easier for people to respond to, eliminating concerns about using the wrong scale.
+
+
+It is common practice to utilize a 5-point rating scale as it reduces the redundancy associated with completing multiple forms or surveys. Moreover, employing such ratings can aid in identifying potential biases or overlooked factors. Additionally, providing a non-mandatory section where respondents can offer comments on the subject matter or the ratings themselves can be advantageous.
