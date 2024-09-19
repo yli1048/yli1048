@@ -1,0 +1,183 @@
+---
+title: "Week 3 Assignment"
+author: "Yanyi Li"
+date: "2024-09-18"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Overview
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tibble)
+```
+
+
+### Normalization
+
+
+##### Z-score Normalization
+
+##### The first method of normalization is referred to as z-score normalization. According to this method, if a value is equivalent to the mean of all the values, it will be normalized to 0. If the value is below the mean, it will be assigned a negative number, while a value above the mean will be assigned a positive number. One advantage of this method is its applicability for comparing scores. However, one limitation is its assumption of a normal distribution.
+
+```{r z-score data}
+data(mtcars)
+glimpse(mtcars)
+```
+
+
+```{r z-score}
+#Find Mean
+mtcars_mpg_mean <- mean(mtcars$mpg)
+
+#Find Standard Deviation
+mtcars_mpg_sd <- sd(mtcars$mpg)
+
+#Standardized vector
+mtcars_mpg_z <- (mtcars$mpg - mtcars_mpg_mean) / mtcars_mpg_sd
+glimpse(mtcars_mpg_z)
+
+#Convert to a data frame for plotting
+df <- enframe(mtcars_mpg_z)
+```
+
+
+```{r plot 1}
+par(mfrow = c(1, 2))
+hist(mtcars$mpg, main = "Original mpg", xlab = "Miles per gallon", col = "yellow")
+hist(df$value, main = "Z-score normalized mpg", xlab = "Z-scores", col = "orange")
+```
+
+
+```{r z-score result}
+#Check the mean of the normalized variable
+mean(mtcars_mpg_z)
+
+#Check the standard deviation
+sd(mtcars_mpg_z)
+```
+
+
+##### Min-max Normalization
+
+##### The second approach involves min-max normalization. In this method, the minimum value of each feature is scaled to 0, the maximum value is scaled to 1, and all other values are proportionally transformed to decimals within the 0 to 1 range. This technique offers the advantage of preserving the original distribution's shape. However, it is not adept at handling outliers.
+
+```{r min-max data}
+data(PlantGrowth)
+glimpse(PlantGrowth)
+```
+
+
+```{r min_max function}
+#min-max normalization
+PlantGrowth_weight_mm <- scale(PlantGrowth$weight, center = min(PlantGrowth$weight) - min(PlantGrowth$weight))
+
+#Check normalization
+glimpse(PlantGrowth_weight_mm)
+```
+
+
+```{r plot 2}
+par(mfrow = c(1, 2))
+hist(PlantGrowth$weight, main = "Original Weight", xlab = "Assault", col = "green")
+hist(PlantGrowth_weight_mm, main = "Min-max normalized Weight", xlab = "Normalized Weight", col = "darkgreen")
+```
+
+
+##### Decimal Scaling Normalization
+
+##### Decimal scaling normalization shifts the decimal point of values. The number of decimal plaves moved depends on the number of digits in the maximum absolute valule in the dataset. One advantage is that it is very straight forward and it less sensitive to outliers. 
+
+```{r range data}
+data(cars)
+glimpse(cars)
+```
+
+
+```{r decimal scaling normalization}
+#Function for range normalization
+decimal_scaling_normalization <- function(x) {
+  max_abs <- max(abs(x))
+  decimal_shift <- nchar(as.integer(max_abs))
+  return (x / 10^decimal_shift)
+}
+
+#check result
+normalized_dist <- decimal_scaling_normalization(cars$dist)
+glimpse(normalized_dist)
+```
+
+
+```{r plot 3}
+par(mfrow = c(1, 2))
+hist(cars$dist, main = "Original Distance", xlab = "Distance", col = "lightblue")
+hist(normalized_dist, main = "Decimal scaling normalized distance", xlab = "Normalized distance", col = "blue")
+```
+
+
+### Character Manipulation
+
+
+##### 2. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+library(stringr)
+```
+
+
+```{r import majors}
+majors <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv", header = TRUE)
+glimpse(majors)
+```
+
+
+```{r string data}
+#Subset data frame based on majors that have "DATA" or "STATISTICS"
+majors[str_detect(majors$Major, "DATA|STATISTICS"),]
+```
+
+
+##### Majors that contains either "DATA" or "STATISTICS" are "COMPUTER PROGRAMMING AND DATA PROCESSING", "MANAGEMENT INFORMATION SYSTEMS AND STATISTICS", and "STATISTICS AND DECISION SCIENCE".
+
+
+
+#### 3. Describe, in words, what these expressions will match:
+##### (.)\1\1
+The word contains the same character three times in a row. For example: AAA.
+
+##### "(.)(.)\\2\\1"
+Two consecutive characters are repeated in reverse order. For example: Alla.
+
+##### (..)\1
+Two consecutive characters are repeated. For example: Haha.
+
+##### "(.).\\1.\\1"
+The word has the same character in the first, third, and fifth positions. For example: Abaca.
+
+##### "(.)(.)(.).*\\3\\2\\1"
+The first three characters are repeated in reverse order at the end, separated by any number of characters. For example: qwerewq. 
+
+
+#### 4. Construct regular expressions to match words that:
+
+##### Start and end with the same character.
+```{r 4.1}
+str_subset(words, "^(.)((.*\\1$)|\\1?$)")
+```
+
+
+##### Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+```{r 4.2}
+str_subset("church", "([A-Za-z][A-Za-z]).*\\1")
+```
+
+
+##### Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+```{r 4.3}
+str_subset(words, "([a-z]).*\\1.*\\1")
+```
+
