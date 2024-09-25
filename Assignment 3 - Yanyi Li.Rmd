@@ -1,0 +1,125 @@
+---
+title: "Week 3 Assignment"
+author: "Yanyi Li"
+date: "2024-09-18"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Overview
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tibble)
+library(flextable)
+```
+
+
+### Normalization
+
+```{r}
+# import data
+df <- read.csv('https://raw.githubusercontent.com/yli1048/yli1048/refs/heads/607/Employee%20Sample%20Data.csv', header=TRUE)
+glimpse(df)
+```
+
+
+```{r}
+#Create data frame for employee information
+df1 <- df[, c(1:5, 9, 14)]
+print(df1)
+```
+
+
+
+```{r}
+#Create data frame for employee's salary
+df2 <- df[, c(1, 10, 11)]
+print(df2)
+```
+
+
+```{r}
+#Plot histogram
+hist(df2$Annual.Salary, main = "Annual Salary", xlab = "Salary")
+```
+
+
+```{r}
+#Create data frame for workforce diversity
+df3 <- df[, c(1, 6:8, 12, 13)]
+print(df3)
+```
+
+
+```{r}
+#Plot histogram
+hist(df3$Age, main = "Age", xlab = "Age")
+```
+
+
+### Character Manipulation
+
+
+##### 2. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+library(stringr)
+```
+
+
+```{r import majors}
+majors <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv", header = TRUE)
+glimpse(majors)
+```
+
+
+```{r string data}
+#Subset data frame based on majors that have "DATA" or "STATISTICS"
+majors[str_detect(majors$Major, "DATA|STATISTICS"),]
+```
+
+
+##### Majors that contains either "DATA" or "STATISTICS" are "COMPUTER PROGRAMMING AND DATA PROCESSING", "MANAGEMENT INFORMATION SYSTEMS AND STATISTICS", and "STATISTICS AND DECISION SCIENCE".
+
+
+
+#### 3. Describe, in words, what these expressions will match:
+##### (.)\1\1
+The word contains the same character three times in a row. For example: AAA.
+
+##### "(.)(.)\\2\\1"
+Two consecutive characters are repeated in reverse order. For example: Alla.
+
+##### (..)\1
+Two consecutive characters are repeated. For example: Haha.
+
+##### "(.).\\1.\\1"
+The word has the same character in the first, third, and fifth positions. For example: Abaca.
+
+##### "(.)(.)(.).*\\3\\2\\1"
+The first three characters are repeated in reverse order at the end, separated by any number of characters. For example: qwerewq. 
+
+
+#### 4. Construct regular expressions to match words that:
+
+##### Start and end with the same character.
+```{r 4.1}
+str_subset(words, "^(.)((.*\\1$)|\\1?$)")
+```
+
+
+##### Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+```{r 4.2}
+str_subset("church", "([A-Za-z][A-Za-z]).*\\1")
+```
+
+
+##### Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+```{r 4.3}
+str_subset(words, "([a-z]).*\\1.*\\1")
+```
+
