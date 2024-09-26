@@ -1,0 +1,100 @@
+---
+title: "Week 4 Assignment"
+author: "Yanyi Li"
+date: "2024-09-24"
+output: html_document
+---
+
+### Overview
+
+In this assignment, I will tidy and transform data using tidyr and dplyr as needed. Then, I will analyze the arrival delays between the two airlines.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+
+library(tidyverse)
+library(dplyr)
+```
+
+
+```{r}
+# import flights data
+df <- read.csv('https://raw.githubusercontent.com/yli1048/yli1048/refs/heads/607/Week%204.csv', header=TRUE)
+names(df)[names(df) == "X"] <- "Airlines"
+names(df)[names(df) == "X.1"] <- "Status"
+glimpse(df)
+```
+
+
+#### Tidy data
+
+
+```{r}
+#Tidy data for visualization
+long.df <- pivot_longer(df, cols = c("Los.Angeles", "Phoenix", "San.Diego", "San.Francisco", "Seattle"), names_to = "City", values_to = "Flights")
+print(long.df)
+```
+
+
+#### Compare arrival delays
+
+
+```{r}
+al.total <- with(long.df, sum(Flights[Airlines == "ALASKA"]))
+
+al.delayed <- with(long.df, sum(Flights[Airlines == "ALASKA" & Status == 'delayed']))
+
+al.percent = (al.delayed / al.total) * 100
+print("The percent of arrival delays of ALASKA airline is")
+print(al.percent)
+```
+
+
+```{r}
+long.df %>%
+  filter(Airlines == "ALASKA" & Status == "delayed") %>%
+  ggplot(aes(x = City, y = Flights)) +
+  geom_col()
+```
+
+
+
+```{r}
+aw.total <- with(long.df, sum(Flights[Airlines == "AM WEST"]))
+
+aw.delayed <- with(long.df, sum(Flights[Airlines == "AM WEST" & Status == 'delayed']))
+
+aw.percent = (aw.delayed / aw.total) * 100
+print("The percent of arrival delays of AW WEST airline is")
+print(aw.percent)
+```
+
+
+```{r}
+long.df %>%
+  filter(Airlines == "AM WEST" & Status == "delayed") %>%
+  ggplot(aes(x = City, y = Flights)) +
+  geom_col()
+```
+
+
+```{r}
+long.df %>%
+filter(Status == "delayed") %>%
+ggplot(aes(x = City, y = Flights, fill = Airlines)) + 
+  ggtitle("Arrival Delays") + 
+  geom_bar(stat = "identity", position = "dodge", width = 0.75)
+```
+
+
+When comparing the percentage of arrival delays, we can see that even though AM WEST airline experiences a higher number of arrival delays, it is actually less likely to be delayed since it has a lower percentage. However, AM WEST airline also has a high likelihood of experiencing delays when traveling to Phoenix. On the other hand, ALASKA airline has a higher chance of experiencing delays when traveling to Seattle.
+
+
+### Conclusion
+
+I have learned how to use pivot_longer and pivot_wider to expand or reduce the number of columns. This can make the data easier to read and help with creating data visualizations. For instance, in this assignment, I utilized pivot_longer to merge all the cities into a single column, which made it simpler to plot and analyze the data frame.
