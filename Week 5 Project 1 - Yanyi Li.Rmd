@@ -1,0 +1,109 @@
+---
+title: "Project 1"
+author: "Yanyi Li"
+date: "2024-09-29"
+output: html_document
+---
+## Project 1
+
+### Overview
+
+In the context of this project, I will create an R Markdown file aimed at generating a CSV file from the provided text document, which encompasses chess tournament outcomes. Subsequently, I will undertake the task of transforming the aforementioned data into a structured data frame before generating the CSV file.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(stringr)
+library(rebus)
+library(knitr)
+```
+
+
+```{r}
+#Import data
+df <- readLines("https://raw.githubusercontent.com/yli1048/yli1048/refs/heads/607/tournamentinfo.txt")
+head(df)
+```
+
+
+```{r}
+#Separate data into two vectors
+df_1 <- df[seq(from = 5, to = length(df)-1, by = 3)]
+df_1 <- str_split(df_1, pattern = "\\|", simplify = TRUE)
+head(df_1)
+```
+
+
+```{r}
+df_2 <- df[seq(from = 6, to = length(df), by = 3)]
+df_2 <- str_split(df_2, pattern = "\\|", simplify = TRUE)
+head(df_2)
+```
+
+
+```{r}
+#Get name
+name <- str_trim(c(df_1[ ,2]))
+head(name)
+```
+
+
+```{r}
+total_points <- str_trim(c(df_1[ ,3]))
+head(total_points)
+```
+
+
+```{r}
+State <- str_trim(c(df_2[ ,1]))
+head(State)
+```
+
+
+```{r}
+rating <- "R:" %R% one_or_more(SPACE) %R% one_or_more(DIGIT) %R% optional("P") 
+pre_rating <- c(str_extract(str_extract(df_2[, 2], pattern = rating), pattern = "\\d+")) 
+pre_rating <- as.numeric(pre_rating)
+head(pre_rating)
+```
+
+
+```{r}
+results <- data.frame("Player_Name" = name, "Player_State" = State, "Total_Points" = total_points, "Pre_Rating" = pre_rating)
+results$Avg_Opp_Pre_Rating <- NA 
+head(results)
+```
+
+
+```{r}
+#Store opponents' ID
+opponents <- matrix(str_extract_all(df_1[,4:10], "\\d+", simplify = TRUE), ncol = 7)
+head(opponents)
+```
+
+
+```{r}
+#Calculate Average Opponents' Pre-Rating
+for(i in 1:nrow(results)){
+  results$Avg_Opp_Pre_Rating[i] <- round(mean(pre_rating[as.numeric(opponents[i,])], na.rm = TRUE))
+}
+```
+
+
+```{r}
+#View final data frame
+head(results)
+```
+
+
+```{r}
+#Create CSV file
+write.csv(results, file = "tournamentinfo.csv")
+```
+
+### Conclusion
+In conclusion, I have acquired the proficiency to utilize the R Markdown file for the generation of a CSV file. CSV files, characterized by their uncomplicated structure and ease of comprehension, offer significant advantages for the analysis of extensive datasets. An area warranting further exploration involves the importation of the CSV file into the SQL database to validate its functionality.
