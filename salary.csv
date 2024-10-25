@@ -1,0 +1,210 @@
+JOB_TITLE,STATE,SALARY
+Data Scientists,Alabama,99040
+Data Scientists,Alaska,91710
+Data Scientists,Arizona,112470
+Data Scientists,Arkansas,117250
+Data Scientists,California,140490
+Data Scientists,Colorado,120320
+Data Scientists,Connecticut,120480
+Data Scientists,Delaware,130520
+Data Scientists,District of Columbia,128810
+Data Scientists,Florida,10490
+Data Scientists,Georgia,108010
+Data Scientists,Hawaii,126080
+Data Scientists,Idaho,126190
+Data Scientists,Illinois,115840
+Data Scientists,Indiana,92520
+Data Scientists,lowa,98550
+Data Scientists,Kansas,107000
+Data Scientists,Kentucky,96290
+Data Scientists,Louisiana,74330
+Data Scientists,Maine,107370
+Data Scientists,Maryland,126020
+Data Scientists,Massachusetts,125100
+Data Scientists,Michigan,96500
+Data Scientists,Minnesota,118760
+Data Scientists,Mississippi,72220
+Data Scientists,Missouri,88210
+Data Scientists,Montana,101350
+Data Scientists,Nebraska,94960
+Data Scientists,Nevada,96800
+Data Scientists,New Hampshire,97330
+Data Scientists,New Jersey,134140
+Data Scientists,New Mexico,88720
+Data Scientists,New York,134830
+Data Scientists,North Carolina,125950
+Data Scientists,North Dakota,102410
+Data Scientists,Ohio,97530
+Data Scientists,Okahoma,93020
+Data Scientists,Oregon,124480
+Data Scientists,Pennsylvania,102370
+Data Scientists,Puerto Rico,72070
+Data Scientists,Rhode Island,127380
+Data Scientists,South Carolina,100790
+Data Scientists,South Dakota,97940
+Data Scientists,Tennessee,97710
+Data Scientists,Texas,109000
+Data Scientists,Utah,101780
+Data Scientists,Vermont,124430
+Data Scientists,Virginia,139080
+Data Scientists,Washington,148730
+Data Scientists,West Virginia,94330
+Data Scientists,Wisconsin,105250
+Data Scientists,Wyoming,125330
+Database Administrator,Alabama,89510
+Database Administrator,Alaska,90370
+Database Administrator,Arizona,104470
+Database Administrator,Arkansas,91160
+Database Administrator,California,116380
+Database Administrator,Colorado,116470
+Database Administrator,Connecticut,109950
+Database Administrator,Delaware,105350
+Database Administrator,District of columbia,116470
+Database Administrator,Florida,104590
+Database Administrator,Georgia,106880
+Database Administrator,Hawaii,90300
+Database Administrator,Idaho,83500
+Database Administrator,Illinois,108650
+Database Administrator,Indiana,76130
+Database Administrator,Iowa,93890
+Database Administrator,Kansas,117660
+Database Administrator,Kentucky,83570
+Database Administrator,Louisiana,91760
+Database Administrator,Maine,97060
+Database Administrator,Maryland,117750
+Database Administrator,Massachusetts,117870
+Database Administrator,Michigan,92980
+Database Administrator,Minnesota,101260
+Database Administrator,Mississippi,82270
+Database Administrator,Missouri,90660
+Database Administrator,Montana,83750
+Database Administrator,Nebraska,87940
+Database Administrator,Nevada,86080
+Database Administrator,New Hampshire,103610
+Database Administrator,New Jersey,122460
+Database Administrator,New Mexico,96950
+Database Administrator,New York,104230
+Database Administrator,North Carolina,104480
+Database Administrator,North Dakota,82660
+Database Administrator,Ohio,94860
+Database Administrator,Oklahoma,85550
+Database Administrator,Oregon,103070
+Database Administrator,Pennsylvania,100160
+Database Administrator,Puerto Rico,56830
+Database Administrator,Rhode Island,107670
+Database Administrator,South Carolina,101420
+Database Administrator,South Dakota,83290
+Database Administrator,Tennessee,104490
+Database Administrator,Texas,100490
+Database Administrator,Utah,97700
+Database Administrator,Vermont,99430
+Database Administrator,Virginia,109790
+Database Administrator,Washington,116710
+Database Administrator,West Virginia,74570
+Database Administrator,Wisconsin,95840
+Database Administrator,wyoming,82620
+Database Architects,Alabama,114400
+Database Architects,Alaska,125650
+Database Architects,Arizona,121080
+Database Architects,Arkansas,96180
+Database Architects,California,162660
+Database Architects,Colorado,141890
+Database Architects,Connecticut,140610
+Database Architects,Delaware,153570
+Database Architects,District of Columbia,162980
+Database Architects,Florida,122790
+Database Architects,Georgia,147250
+Database Architects,Hawaii,137690
+Database Architects,Idaho,133130
+Database Architects,Illinois,124240
+Database Architects,Indiana,93180
+Database Architects,Iowa,130660
+Database Architects,Kansas,161820
+Database Architects,Kentucky,99270
+Database Architects,Louisiana,103870
+Database Architects,Maine,118990
+Database Architects,Maryland,150590
+Database Architects,Massachusetts,152850
+Database Architects,Michigan,114390
+Database Architects,Minnesota,128380
+Database Architects,Mississippi,79750
+Database Architects,Missouri,106560
+Database Architects,Montana,117220
+Database Architects,Nebraska,130230
+Database Architects,Nevada,130500
+Database Architects,New Hampshire,123150
+Database Architects,New Jersey,158930
+Database Architects,New Mexico,118590
+Database Architects,New York,144140
+Database Architects,North Carolina,122460
+Database Architects,North Dakota,106250
+Database Architects,Ohio,121620
+Database Architects,Oklahoma,119940
+Database Architects,Oregon,132460
+Database Architects,Pennsylvania,121960
+Database Architects,Puerto Rico,73590
+Database Architects,Rhode Island,118510
+Database Architects,South Carolina,126340
+Database Architects,South Dakota,116210
+Database Architects,Tennessee,119530
+Database Architects,Texas,139570
+Database Architects,Utah,145400
+Database Architects,Vermont,152540
+Database Architects,Virginia,143300
+Database Architects,Washington,154430
+Database Architects,West Virginia,103550
+Database Architects,Wisconsin,130180
+Database Architects,wyoming,61130
+Management Analysts,Alabama,112390
+Management Analysts,Alaska,105470
+Management Analysts,Arizona,97980
+Management Analysts,Arkansas,77180
+Management Analysts,California,119370
+Management Analysts,Colorado,105670
+Management Analysts,Connecticut,115530
+Management Analysts,Delaware,101500
+Management Analysts,District of columbia,120480
+Management Analysts,Florida,95920
+Management Analysts,Georgia,110250
+Management Analysts,Guam,72800
+Management Analysts,Hawaii,91270
+Management Analysts,Idaho,88050
+Management Analysts,Illinois,121310
+Management Analysts,Indiana,94760
+Management Analysts,Iowa,91630
+Management Analysts,Kansas,87770
+Management Analysts,Kentucky,90240
+Management Analysts,Louisiana,104940
+Management Analysts,Maine,89970
+Management Analysts,Maryland,117360
+Management Analysts,Massachusetts,134350
+Management Analysts,Michigan,98520
+Management Analysts,Minnesota,102380
+Management Analysts,Mississippi,83720
+Management Analysts,Missouri,103400
+Management Analysts,Montana,87610
+Management Analysts,Nebraska,89650
+Management Analysts,Nevada,93930
+Management Analysts,New Hampshire,119500
+Management Analysts,New Jersey,122840
+Management Analysts,New Mexico,85070
+Management Analysts,New York,126450
+Management Analysts,North Carolina,109220
+Management Analysts,North Dakota,97190
+Management Analysts,Ohio,95860
+Management Analysts,Oklahoma,87360
+Management Analysts,Oregon,98710
+Management Analysts,Pennsylvania,98460
+Management Analysts,Puerto Rico,67210
+Management Analysts,Rhode Island,114260
+Management Analysts,South Carolina,96820
+Management Analysts,South Dakota,87200
+Management Analysts,Tennessee,93870
+Management Analysts,Texas,106600
+Management Analysts,Utah,86780
+Management Analysts,Vermont,125240
+Management Analysts,Virgin Islands,81050
+Management Analysts,Washington,119390
+Management Analysts,West Virginia,93020
+Management Analysts,Wisconsin,109660
+Management Analysts,Wyoming,126840
