@@ -1,0 +1,30 @@
+---
+title: "Week 9 API"
+author: "Yanyi Li"
+date: "2024-10-29"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+### Overview
+
+In this assignment, I will use the httr2 package to send requests through the Web API and gather the most viewed New York Times articles from the past seven days. Additionally, I will convert the results into a data frame.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(httr2)
+```
+
+```{r}
+req <- request("https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=9qmUA6L7tSCea7ArphemdmGfd0okFsy2")
+resp <- req |> req_perform()
+resp_json <- resp |> resp_body_json(simplifyVector = TRUE)
+mostviewed <- resp_json$results
+head(mostviewed)
+```
+
+
+### Conclusion
+Overall, sending requests through the WebApi was not difficult, and it can be easily achieved by using the httr2 package. One way to expand this assignment would be to use other packages to determine which option is easier and more effective.
