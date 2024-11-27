@@ -1,4 +1,4 @@
-Country,LifeExp,InfantSurvival,Under5Survival,TBFree,PropMD,PropRN,PersExp,GovtExp,,TotExp,LifeExp
+Country,Life_Exp,Infant_Survival,Under_5_Survival,TB_Free,Prop_MD,Prop_RN,Pers_Exp,Govt_Exp,,Tot_Exp,Life_Exp
 Afghanistan,42,0.835,0.743,0.99769,0.000228841,0.000572294,20,92,,112,42
 Albania,71,0.985,0.983,0.99974,0.001143127,0.004614439,169,3128,,3297,71
 Algeria,71,0.967,0.962,0.99944,0.001060478,0.002091362,108,5184,,5292,71
