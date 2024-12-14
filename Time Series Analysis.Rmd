@@ -1,0 +1,215 @@
+---
+title: "Time Series Analysis"
+author: "Yanyi Li"
+date: "2024-12-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+
+library(tidyverse)
+library(forecast)
+library(lubridate)
+library(Metrics)
+```
+
+#### tidy data
+
+```{r}
+df <- read.csv("https://raw.githubusercontent.com/yli1048/yli1048/refs/heads/607/sample.csv")
+glimpse(df)
+```
+
+```{r}
+df$Date <- ymd(df$Date)
+glimpse(df)
+```
+
+```{r}
+sub_df <- df %>%
+  filter(store == 0 & product == 0)
+nrow(sub_df)
+```
+
+```{r}
+sales <- select(sub_df, Date, number_sold)
+glimpse(sales)
+```
+```{r}
+test_set_start_date <- as.Date("2016-12-31")
+
+train_set <- subset(sales, Date < test_set_start_date)
+test_set <- subset(sales, Date >= test_set_start_date)
+
+dim(train_set)
+dim(test_set)
+```
+
+#### basic visualisation
+
+```{r}
+ggplot() +
+  geom_line(data = train_set, aes(x = Date, y = number_sold, color = "Training"), size = 1) +
+  geom_line(data = test_set, aes(x = Date, y = number_sold, color = "Testing"), size = 1) +
+  labs(
+    title = "Sales - Training and Testing Sets",
+    x = "Date",
+    y = "Sales"
+  ) +
+  scale_color_manual(values = c("Training" = "#12355B", "Testing" = "#D72638"), name = "Sales") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20))
+```
+
+#### averaging forecasting
+
+```{r}
+train_set_avg <- mean(train_set$number_sold)
+simple_avg_predictions <- data.frame(
+  Date = test_set$Date,
+  number_sold = rep(train_set_avg, nrow(test_set))
+)
+
+glimpse(train_set_avg)
+```
+
+```{r}
+series_ts <- ts(train_set$number_sold, frequency = 12)
+glimpse(series_ts)
+```
+
+```{r}
+ma3 <- ma(series_ts, order = 3, centre = FALSE)
+ma6 <- ma(series_ts, order = 6, centre = FALSE)
+ma12 <- ma(series_ts, order = 12, centre = FALSE)
+
+ma3_forecast <- forecast(ma3, h = nrow(test_set))
+ma6_forecast <- forecast(ma6, h = nrow(test_set))
+ma12_forecast <- forecast(ma12, h = nrow(test_set))
+
+ma_forecast_df <- data.frame(
+  Date = test_set$Date,
+  MA3 = ma3_forecast$mean,
+  MA6 = ma6_forecast$mean,
+  MA12 = ma12_forecast$mean
+)
+glimpse(ma_forecast_df)
+```
+
+```{r}
+ses <- HoltWinters(series_ts, beta = FALSE, gamma = FALSE)
+des <- HoltWinters(series_ts, gamma = FALSE)
+tes <- HoltWinters(series_ts)
+
+ses_forecast <- forecast(ses, h = nrow(test_set))
+des_forecast <- forecast(des, h = nrow(test_set))
+tes_forecast <- forecast(tes, h = nrow(test_set))
+
+exsm_forecast_df <- data.frame(
+  Date = test_set$Date,
+  SES = ses_forecast$mean,
+  DES = des_forecast$mean,
+  TES = tes_forecast$mean
+)
+glimpse(exsm_forecast_df)
+```
+
+```{r}
+tes_seasonal_add <- HoltWinters(series_ts, seasonal = "additive")
+tes_seasonal_mul <- HoltWinters(series_ts, seasonal = "multiplicative")
+
+tes_seasonal_add_forecast <- forecast(tes_seasonal_add, h = nrow(test_set))
+tes_seasonal_mul_forecast <- forecast(tes_seasonal_mul, h = nrow(test_set))
+
+exsm_tes_forecast_df <- data.frame(
+  Date = test_set$Date,
+  TES = tes_forecast$mean,
+  TESAdd = tes_seasonal_add_forecast$mean,
+  TESMul = tes_seasonal_mul_forecast$mean
+)
+
+glimpse(exsm_tes_forecast_df)
+```
+
+```{r}
+ar_model <- Arima(series_ts, order = c(1, 0, 0))
+ma_model <- Arima(series_ts, order = c(0, 0, 1))
+arma_model <- Arima(series_ts, order = c(1, 0, 1))
+arima_model <- Arima(series_ts, order = c(1, 1, 1))
+auto_arima_no_season_model <- auto.arima(series_ts, seasonal = FALSE)
+auto_arima_season_model <- auto.arima(series_ts, seasonal = TRUE)
+
+ar_forecasts <- forecast(ar_model, h = nrow(test_set))
+ma_forecasts <- forecast(ma_model, h = nrow(test_set))
+arma_forecasts <- forecast(arma_model, h = nrow(test_set))
+arima_forecasts <- forecast(arima_model, h = nrow(test_set))
+auto_arima_no_season_forecasts <- forecast(auto_arima_no_season_model, h = nrow(test_set))
+auto_arima_season_forecasts <- forecast(auto_arima_season_model, h = nrow(test_set))
+
+arima_forcast_df <- data.frame(
+  Date = test_set$Date,
+  AR = ar_forecasts$mean,
+  MA = ma_forecasts$mean,
+  ARMA = arma_forecasts$mean,
+  ARIMA = arima_forecasts$mean,
+  AutoARIMANoSeason = auto_arima_no_season_forecasts$mean,
+  AutoARIMASeason = auto_arima_season_forecasts$mean
+)
+
+glimpse(arima_forcast_df)
+```
+
+```{r}
+all_model_data <- data.frame(
+  Date = test_set$Date,
+  number_sold = test_set$number_sold,
+  AVG = simple_avg_predictions$number_sold,
+  MA = ma_forecasts$mean,
+  MA3 = ma3_forecast$mean,
+  MA6 = ma6_forecast$mean,
+  MA12 = ma12_forecast$mean,
+  SES = ses_forecast$mean,
+  DES = des_forecast$mean,
+  TES = tes_forecast$mean,
+  TESAdd = tes_seasonal_add_forecast$mean,
+  TESMul = tes_seasonal_mul_forecast$mean,
+  AR = ar_forecasts$mean,
+  ARMA = arma_forecasts$mean,
+  ARIMA = arima_forecasts$mean,
+  AutoARIMANoSeason = auto_arima_no_season_forecasts$mean,
+  AutoARIMASeason = auto_arima_season_forecasts$mean
+)
+
+glimpse(all_model_data)
+```
+
+```{r}
+mae_values <- c()
+mape_values <- c()
+rmse_values <- c()
+
+for (col in names(all_model_data)[3:ncol(all_model_data)]) {
+  mae_values <- c(mae_values, mae(all_model_data$number_sold, all_model_data[[col]]))
+  mape_values <- c(mape_values, mape(all_model_data$number_sold, all_model_data[[col]]))
+  rmse_values <- c(rmse_values, rmse(all_model_data$number_sold, all_model_data[[col]]))
+}
+
+model_test_set_metrics <- data.frame(
+  Model = names(all_model_data)[3:ncol(all_model_data)],
+  MAE = mae_values,
+  MAPE = mape_values,
+  RMSE = rmse_values
+)
+glimpse(model_test_set_metrics)
+```
+
+```{r}
+result <- arrange(model_test_set_metrics, MAE)
+print(result)
+```
+
