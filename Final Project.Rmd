@@ -1,0 +1,120 @@
+---
+title: "607 Final Project"
+author: "Yanyi Li"
+date: "2024-12-12"
+output: html_document
+---
+
+### Data Cleaning
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+#### First Dataset
+
+```{r}
+#import the first dataset
+df1 <- read.csv("https://raw.githubusercontent.com/yli1048/yli1048/refs/heads/607/spotify-streaming-top-50-world.csv", stringsAsFactors = TRUE)
+glimpse(df1)
+```
+
+```{r}
+# subset the dataset to only 11/26/2024
+df1 <- subset.data.frame(df1, date == "2024-11-26")
+glimpse(df1)
+```
+
+```{r}
+# convert date to date format
+df1$date <- ymd(df1$date)
+df1$release_date <- ymd(df1$release_date)
+glimpse(df1)
+```
+
+```{r}
+# subset columns
+spotify <- df1[, -c(1, 7, 8, 11)]
+```
+
+```{r}
+# change data type
+spotify$song <- as.character(spotify$song)
+spotify$artist <- as.character(spotify$artist)
+spotify$is_explicit <- as.logical(spotify$is_explicit)
+glimpse(spotify)
+```
+
+#### Second Dataset
+
+```{r}
+# import the second dataset
+df2 <- read.csv("universal_top_spotify_songs.csv")
+glimpse(df2)
+```
+
+```{r}
+# rename columns
+df2 <- rename(df2, song = name)
+glimpse(df2)
+```
+
+#### Merge Dataset
+
+```{r}
+final_df <- left_join(spotify, df2, by = "song") %>% distinct(song, .keep_all = TRUE)
+glimpse(final_df)
+```
+
+```{r}
+ms <- final_df$duration_ms / 1000
+hist(ms,
+main="Song Durations in the Spotify Top 50 Global Playlist",
+xlab="Duration in Second",
+col="orange")
+```
+
+```{r}
+count_df <- final_df %>% count(is_explicit)
+colnames(count_df)[colnames(count_df) == 'n'] <- 'songs'
+print(count_df)
+```
+
+```{r}
+ggplot(count_df, aes(x = is_explicit, y = songs, fill = is_explicit)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Count of Songs by Explicit Content",
+       x = "Explicit Content",
+       y = "Number of Songs") +
+  theme_minimal() +
+  scale_fill_manual(values = c("TRUE" = "darkred", "FALSE" = "darkgreen")) +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(final_df, aes(x=position, y=danceability)) + 
+  geom_point(size = 2, color = "steelblue") +
+  labs(title = "Scatterplot of Rank Position vs. Danceability",
+       x = "Rank Position",
+       y = "Danceability")
+```
+
+```{r}
+ggplot(final_df, aes(x=position, y=energy)) + 
+  geom_point(size = 2, color = "red4") +
+  labs(title = "Scatterplot of Rank Position vs. Energy",
+       x = "Rank Position",
+       y = "Energy")
+```
+
+```{r}
+# Fit the model
+model <- lm(popularity ~ duration_ms + is_explicit + danceability + energy, data = final_df)
+
+# Summary of the model
+summary(model)
+```
+
+```{r}
+plot(model)
+```
